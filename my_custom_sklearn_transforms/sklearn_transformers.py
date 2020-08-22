@@ -17,19 +17,17 @@ class DropColumns(BaseEstimator, TransformerMixin):
 
  # Trasnformación para estandarizar los datos
 class Scaler(BaseEstimator, TransformerMixin):
-    def __init__(self, excluir):
-        self.excluir = excluir
+    def __init__(self):
         self.sc = StandardScaler()
 
     def fit(self, X, y=None):
-        data = X.copy().drop(columns=self.excluir)
+        data = X.copy()
         self.sc.fit_transform(data)
         return self
     
     def transform(self, X):
         # Primero copiamos el dataframe de datos de entrada 'X'
-        x_tmp = X.copy().drop(columns=self.excluir)
+        x_tmp = X.copy()
         data = self.sc.transform(x_tmp)
         data = pd.DataFrame.from_records(data=data, columns=x_tmp.columns)
-        # Devolvemos un nuevo dataframe de datos trasnformados, mas la columna sin transformar
-        return pd.concat([data, X[self.excluir]], axis=1)
+        return data
